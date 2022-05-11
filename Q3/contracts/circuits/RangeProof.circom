@@ -2,14 +2,24 @@ pragma circom 2.0.0;
 
 include "../../node_modules/circomlib/circuits/comparators.circom";
 
-template RangeProof(n) {
-    assert(n <= 252);
-    signal input in; // this is the number to be proved inside the range
-    signal input range[2]; // the two elements should be the range, i.e. [lower bound, upper bound]
+template RangeProof() {
+    signal input min;
+    signal input max;
+    signal input in;
+    
     signal output out;
 
-    component low = LessEqThan(n);
-    component high = GreaterEqThan(n);
+    component lt = LessEqThan(32);
+    component gt = GreaterEqThan(32);
+    
+    lt.in[0] <== in;
+    lt.in[1] <== min;
 
-    // [assignment] insert your code here
+    gt.in[0] <== in;
+    gt.in[1] <== max;
+
+
+
+    out <== lt.out * gt.out;
 }
+
